@@ -1,10 +1,10 @@
 /* eslint @typescript-eslint/ban-ts-ignore: off */
 import {
   app,
-  Menu,
-  shell,
   BrowserWindow,
-  MenuItemConstructorOptions
+  Menu,
+  MenuItemConstructorOptions,
+  shell
 } from 'electron';
 
 export default class MenuBuilder {

@@ -1,0 +1,11 @@
+.studentVideo {
+  display: none;
+}
+
+.studentVideoEnabled {
+  display: block;
+}
+
+.video {
+  display: block;
+}
