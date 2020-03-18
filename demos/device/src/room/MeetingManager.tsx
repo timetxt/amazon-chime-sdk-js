@@ -4,9 +4,10 @@ import {
   ConsoleLogger,
   DefaultDeviceController,
   DefaultMeetingSession,
-  Device,
   LogLevel,
   MeetingSessionConfiguration,
+  ScreenShareViewFacade,
+  ScreenObserver,
 } from '../../../../build/index';
 
 const BASE_URL = [
@@ -19,6 +20,7 @@ const BASE_URL = [
 class MeetingManager {
   private meetingSession: DefaultMeetingSession;
   private audioVideo: AudioVideoFacade;
+  private screenShareView: ScreenShareViewFacade;
   private title: string;
   // private device: MediaTrackConstraints = {audio: true}
 
@@ -28,6 +30,8 @@ class MeetingManager {
     configuration.enableWebAudio = false;
     this.meetingSession = new DefaultMeetingSession(configuration, logger, deviceController);
     this.audioVideo = this.meetingSession.audioVideo;
+    this.screenShareView = this.meetingSession.screenShareView;
+
     await this.setupAudioDevices();
   }
 
@@ -41,12 +45,19 @@ class MeetingManager {
     await this.audioVideo.chooseAudioInputDevice(defaultInput);
   }
 
+  registerScreenShareObservers(observer: ScreenObserver): void {
+    if (!this.screenShareView) {
+      console.log('ScreenView not initialize. Cannot add observer');
+      return;
+    }
+    this.screenShareView.registerObserver(observer);
+  }
+
   addObserver(observer: AudioVideoObserver): void {
     if (!this.audioVideo) {
       console.error('AudioVideo not initialized. Cannot add observer');
       return;
     }
-
     this.audioVideo.addObserver(observer);
   }
 
@@ -74,6 +85,18 @@ class MeetingManager {
     this.audioVideo.stopLocalVideoTile();
   }
 
+  async startViewingScreenShare(screenViewElement: HTMLDivElement): Promise<void> {
+    this.meetingSession.screenShareView
+      .start(screenViewElement)
+      .catch(error => console.error(error));
+  }
+
+  stopViewingScreenShare(): void {
+    this.meetingSession.screenShareView.stop().catch(error => {
+      console.error(error);
+    });
+  }
+
   async joinMeeting(meetingId: string, name: string): Promise<any> {
     const url = `${BASE_URL}join?title=${encodeURIComponent(meetingId)}&name=${encodeURIComponent(
       name
@@ -84,6 +107,7 @@ class MeetingManager {
     await this.initializeMeetingSession(
       new MeetingSessionConfiguration(data.JoinInfo.Meeting, data.JoinInfo.Attendee)
     );
+    await this.meetingSession.screenShareView.open();
     this.audioVideo.start();
   }
 
@@ -95,7 +119,18 @@ class MeetingManager {
   }
 
   leaveMeeting(): void {
+    this.meetingSession.screenShareView.close();
     this.audioVideo.stop();
+  }
+
+  async getAttendee(attendeeId: string): Promise<string> {
+    const response = await fetch(
+      `${BASE_URL}attendee?title=${encodeURIComponent(this.title)}&attendee=${encodeURIComponent(
+        attendeeId
+      )}`
+    );
+    const json = await response.json();
+    return json.AttendeeInfo.Name;
   }
 
   bindAudioElement(ref: HTMLAudioElement) {

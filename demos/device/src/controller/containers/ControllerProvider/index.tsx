@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
 
-import { initialState, reducer, State } from './reducer';
+import { initialState, reducer } from './reducer';
 
 async function sendMessage(msg: { type: any }): Promise<void> {
   if (!window.controllerEnvironment) return;

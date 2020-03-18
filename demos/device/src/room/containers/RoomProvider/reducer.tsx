@@ -1,6 +1,7 @@
 export interface State {
   activeMeeting: boolean;
   isSharingLocalVideo: boolean;
+  isViewingSharedScreen: boolean;
 }
 
 export enum Type {
@@ -9,6 +10,8 @@ export enum Type {
   StopLocalVideo = 'STOP_LOCAL_VIDEO',
   EndMeeting = 'END_MEETING',
   LeaveMeeting = 'LEAVE_MEETING',
+  StartScreenShareView = 'START_SCREEN_SHARE_VIEW',
+  StopScreenShareView = 'STOP_SCREEN_SHARE_VIEW',
 }
 
 export interface Action {
@@ -19,6 +22,7 @@ export interface Action {
 export const initialState: State = {
   activeMeeting: false,
   isSharingLocalVideo: false,
+  isViewingSharedScreen: false,
 };
 
 export function reducer(state: State, action: Action): State {
@@ -48,6 +52,16 @@ export function reducer(state: State, action: Action): State {
       return {
         ...state,
         activeMeeting: false,
+      };
+    case Type.StartScreenShareView:
+      return {
+        ...state,
+        isViewingSharedScreen: true,
+      };
+    case Type.StopScreenShareView:
+      return {
+        ...state,
+        isViewingSharedScreen: false,
       };
     default:
       return state;

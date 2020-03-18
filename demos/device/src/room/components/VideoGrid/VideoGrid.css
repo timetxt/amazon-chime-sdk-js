@@ -16,3 +16,10 @@
   right: 1rem;
   width: 35rem;
 }
+
+#shared-content-view {
+  height: 40vh;
+  padding: 2rem;
+  resize: both;
+  display: none;
+}

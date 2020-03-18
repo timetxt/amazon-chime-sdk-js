@@ -1,6 +1,7 @@
 export interface State {
   activeMeeting: boolean;
   isSharingLocalVideo: boolean;
+  isViewingSharedScreen: boolean;
 }
 
 export enum Type {
@@ -17,6 +18,7 @@ export interface Action {
 export const initialState: State = {
   activeMeeting: false,
   isSharingLocalVideo: false,
+  isViewingSharedScreen: false,
 };
 
 export const reducer = (state: State, action: Action): State => {

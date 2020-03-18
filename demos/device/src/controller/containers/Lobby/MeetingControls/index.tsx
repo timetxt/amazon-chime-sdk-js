@@ -16,6 +16,14 @@ const MeetingControls: React.FC = () => {
     });
   };
 
+  const toggleScreenShareViewTile = (): void => {
+    dispatch({
+      type: state.isViewingSharedScreen
+        ? actionType.StopScreenShareView
+        : actionType.StartScreenShareView,
+    });
+  };
+
   const leaveMeeting = (): void => {
     dispatch({
       type: actionType.LeaveMeeting,
@@ -32,6 +40,9 @@ const MeetingControls: React.FC = () => {
     <div className="MeetingControls">
       <Button active={state.isSharingLocalVideo} onClick={toggleVideoTile}>
         {state.isSharingLocalVideo ? 'Disable video' : 'Enable video'}
+      </Button>
+      <Button active={state.isViewingSharedScreen} onClick={toggleScreenShareViewTile}>
+        {state.isViewingSharedScreen ? 'Hide Screenshare' : 'View Screenshare'}
       </Button>
       <Button onClick={leaveMeeting}>Leave meeting</Button>
       <Button onClick={endMeeting}>End meeting</Button>
