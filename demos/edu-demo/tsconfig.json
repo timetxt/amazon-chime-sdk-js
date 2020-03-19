@@ -34,7 +34,6 @@
     "app/dist",
     "dll",
     "app/main.js",
-    "app/main.js.map",
-    "amazon-chime-sdk-js"
+    "app/main.js.map"
   ]
 }

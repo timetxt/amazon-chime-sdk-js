@@ -1,34 +1,15 @@
-## Education Electron Demo
+## EduClassroom
 
-We will automate some steps before merging this branch into master.
-
-## Getting started
+First deploy the stack:
 
 ```bash
-# Copy and paste the Chime SDK "build" folder.
-cd /path/to/amazon-chime-sdk-js
-npm run build # Bug: This command generates the wrong "build" folder now. Run it after removing "./guides/docs.ts" from tsconfig.json to mitigate the issue.
-cd demos/edu-demo
-cp -r ../../build amazon-chime-sdk-js
-
-# Install dependencies
-yarn
+script/deploy.js -s <stack-name>
 ```
 
-## Building
+Note the URL when the deployment finishes, this will have a link to download the clients.
 
-```bash
-# The "edu-demo" uses server.js at http://127.0.0.1:8080
-cd ../browser
-npm run start
-```
+### Local dev
 
 ```bash
 yarn dev
-```
-
-## Packaging
-
-```
-yarn package
 ```

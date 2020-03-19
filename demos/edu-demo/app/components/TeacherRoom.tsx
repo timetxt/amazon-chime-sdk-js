@@ -5,7 +5,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import {
   MeetingSessionStatus,
   MeetingSessionStatusCode
-} from '../../amazon-chime-sdk-js';
+} from 'amazon-chime-sdk-js';
 import routes from '../constants/routes.json';
 import getChimeContext from '../context/getChimeContext';
 import Controls from './Controls';

@@ -11,7 +11,7 @@ import {
   LogLevel,
   MeetingSession,
   MeetingSessionConfiguration
-} from '../../amazon-chime-sdk-js';
+} from 'amazon-chime-sdk-js';
 import getChimeContext from '../context/getChimeContext';
 import getBaseUrl from '../utils/getBaseUrl';
 
