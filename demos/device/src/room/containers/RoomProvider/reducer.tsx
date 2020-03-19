@@ -45,13 +45,11 @@ export function reducer(state: State, action: Action): State {
       };
     case Type.EndMeeting:
       return {
-        ...state,
-        activeMeeting: false,
+        ...initialState,
       };
     case Type.LeaveMeeting:
       return {
-        ...state,
-        activeMeeting: false,
+        ...initialState,
       };
     case Type.StartScreenShareView:
       return {

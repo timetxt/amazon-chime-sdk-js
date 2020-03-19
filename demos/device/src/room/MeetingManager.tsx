@@ -119,6 +119,7 @@ class MeetingManager {
   }
 
   leaveMeeting(): void {
+    this.stopViewingScreenShare();
     this.meetingSession.screenShareView.close();
     this.audioVideo.stop();
   }

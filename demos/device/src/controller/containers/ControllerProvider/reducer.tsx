@@ -37,8 +37,8 @@ export const reducer = (state: State, action: Action): State => {
       };
     case Type.MeetingLeft:
       return {
-        ...state,
-        activeMeeting: false,
+        // ...state,
+        ...initialState,
       };
     default:
       return { ...state };
