@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: #f8f8f8;
+  background: #252525;
 }
 
 .title {
@@ -17,7 +17,7 @@
   width: 400px;
   background: white;
   margin: auto;
-  border: 1px solid #e4e4e4;
+  border: none;
   border-radius: 0.25rem;
   padding: 3rem 2rem;
 }

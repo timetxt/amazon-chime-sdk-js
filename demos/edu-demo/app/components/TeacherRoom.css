@@ -1,8 +1,21 @@
 .teacherRoom {
-  background: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  background: #252525;
   height: 100%;
 }
 
 .audio {
   display: none;
+}
+
+.group {
+  flex: 1 1 auto;
+}
+
+.bottom {
+  flex: 0 0 var(--bottom-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

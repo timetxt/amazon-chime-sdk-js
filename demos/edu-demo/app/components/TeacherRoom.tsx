@@ -86,9 +86,13 @@ export default function TeacherRoom() {
       {status === Status.Loading && <LoadingSpinner />}
       {(status === Status.RoomReady || status === Status.Succeeded) && (
         <>
-          <TeacherVideo />
-          <StudentVideoGroup />
-          <Controls />
+          <div className={cx('group')}>
+            <StudentVideoGroup />
+          </div>
+          <div className={cx('bottom')}>
+            <Controls />
+            <TeacherVideo />
+          </div>
         </>
       )}
       {status === Status.Failed && errorMesssage && (

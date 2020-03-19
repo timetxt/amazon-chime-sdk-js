@@ -1,3 +1,47 @@
 .studentVideoGroup {
-  display: block;
+  display: grid;
+  height: 100%;
+  grid-gap: 1rem;
+  padding: 1rem;
+}
+
+.studentVideoGroup-1 {
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  padding: 0 !important;
+}
+
+.studentVideoGroup-2,
+.studentVideoGroup-3,
+.studentVideoGroup-4 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.studentVideoGroup-5,
+.studentVideoGroup-6 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.studentVideoGroup-7,
+.studentVideoGroup-8,
+.studentVideoGroup-9 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.studentVideoGroup-10,
+.studentVideoGroup-11,
+.studentVideoGroup-12 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.studentVideoGroup-13,
+.studentVideoGroup-14,
+.studentVideoGroup-15,
+.studentVideoGroup-16 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
 }

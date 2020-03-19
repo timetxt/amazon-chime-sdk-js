@@ -40,6 +40,11 @@ export default function StudentVideoGroup() {
     return -1;
   };
 
+  const numberOfVisibleIndices = Object.keys(visibleIndices).reduce(
+    (result, key) => result + (visibleIndices[key] ? 1 : 0),
+    0
+  );
+
   useEffect(() => {
     chime.audioVideo.addObserver({
       videoTileDidUpdate: (tileState: VideoTileState): void => {
@@ -67,7 +72,12 @@ export default function StudentVideoGroup() {
   }, []);
 
   return (
-    <div className={cx('studentVideoGroup')}>
+    <div
+      className={cx(
+        'studentVideoGroup',
+        `studentVideoGroup-${numberOfVisibleIndices}`
+      )}
+    >
       {Array.from(Array(MAX_STUDENT_VIDEOS).keys()).map((key, index) => (
         <StudentVideo
           key={key}

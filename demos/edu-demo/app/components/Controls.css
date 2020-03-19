@@ -1,3 +1,34 @@
 .controls {
   display: block;
 }
+
+.controls button {
+  width: 2.75rem;
+  height: 2.75rem;
+  text-align: center;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  color: #dedede;
+  background: #454545;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  outline: none;
+}
+
+.controls button.enabled {
+  color: #454545;
+  background: #fafafa;
+}
+
+.controls button + button {
+  margin-left: 1rem;
+}
+
+.controls button:hover {
+  opacity: 0.8;
+}
+
+.endButton {
+  background: #d62f12 !important;
+}

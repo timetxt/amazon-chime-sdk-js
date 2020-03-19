@@ -7,14 +7,8 @@ import styles from './TeacherVideo.css';
 
 const cx = classNames.bind(styles);
 
-enum VideoStatus {
-  Disabled,
-  Loading,
-  Enabled
-}
-
 export default function TeacherVideo() {
-  const [videoStatus, setVideoStatus] = useState(VideoStatus.Disabled);
+  const [enabled, setEnabled] = useState(false);
   const chime = useContext(getChimeContext());
   const videoElement = useRef(null);
 
@@ -28,40 +22,17 @@ export default function TeacherVideo() {
           tileState.tileId,
           videoElement.current
         );
+        setEnabled(tileState.active);
       }
     });
   }, []);
 
   return (
-    <div className={cx('teacherVideo')}>
-      {videoStatus === VideoStatus.Disabled && (
-        <button
-          type="button"
-          onClick={async () => {
-            setVideoStatus(VideoStatus.Loading);
-            const videoInputs = await chime.audioVideo.listVideoInputDevices();
-            await chime.audioVideo.chooseVideoInputDevice(
-              videoInputs[0].deviceId
-            );
-            chime.audioVideo.startLocalVideoTile();
-            setVideoStatus(VideoStatus.Enabled);
-          }}
-        >
-          Enable video
-        </button>
-      )}
-      {videoStatus === VideoStatus.Enabled && (
-        <button
-          type="button"
-          onClick={() => {
-            setVideoStatus(VideoStatus.Loading);
-            chime.audioVideo.stopLocalVideoTile();
-            setVideoStatus(VideoStatus.Disabled);
-          }}
-        >
-          Disable video
-        </button>
-      )}
+    <div
+      className={cx('teacherVideo', {
+        teacherVideoEnabled: enabled
+      })}
+    >
       <video muted ref={videoElement} className={cx('video')} />
     </div>
   );

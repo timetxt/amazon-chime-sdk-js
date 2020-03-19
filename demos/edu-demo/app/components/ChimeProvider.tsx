@@ -84,6 +84,7 @@ class ChimeSdkWrapper
   };
 
   leaveRoom = async (end: boolean): Promise<void> => {
+    this.audioVideo.stop();
     if (end) {
       await fetch(
         `${getBaseUrl()}end?title=${encodeURIComponent(this.title)}`,
@@ -92,7 +93,6 @@ class ChimeSdkWrapper
         }
       );
     }
-    this.audioVideo.stop();
   };
 }
 
