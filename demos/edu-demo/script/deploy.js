@@ -106,6 +106,11 @@ function spawnOrFail(command, args, options) {
   return output;
 }
 
+function spawnAndIgnoreResult(command, args, options) {
+  console.log(`--> ${command} ${args.join(' ')}`);
+  spawnSync(command, args, options);
+}
+
 function appHtml(appName) {
   return `../browser/dist/${appName}.html`
 }
@@ -151,8 +156,8 @@ function main() {
   fs.writeFileSync('src/index.html', `
 <html>
 <body>
-<a href="https://${bucket}-releases.s3.amazonaws.com/${appName}.dmg">Download ${appName}.dmg for macOS</a> |
-<a href="https://${bucket}-releases.s3.amazonaws.com/${appName}.msi">Download ${appName}.msi for Windows</a>
+<a href="https://${bucket}-releases.s3.amazonaws.com/mac/${appName}.zip">Download ${appName} for macOS (ZIP)</a> |
+<a href="https://${bucket}-releases.s3.amazonaws.com/win/${appName}.zip">Download ${appName} for Windows (ZIP)</a>
   `);
 
   spawnOrFail('touch', ['src/index.html', 'src/indexV2.html']);
@@ -176,13 +181,18 @@ function main() {
   spawnOrFail('yarn', []);
 
   console.log ('... packaging (this may take a while) ...');
-  spawnOrFail('yarn',  ['package']);
+  spawnAndIgnoreResult('yarn',  ['package-mac']);
+  spawnAndIgnoreResult('yarn',  ['package-win']);
+  spawnOrFail('mv', ['release/win-unpacked', `release/${appName}`]);
+  process.chdir(rootDir + '/release');
+  spawnOrFail('zip', ['-r', appName + '-win.zip', appName]);
+  process.chdir(rootDir);
 
   console.log ('... uploading Mac installer (this may take a while) ...');
-  spawnOrFail('aws', ['s3', 'cp', '--acl', 'public-read', `release/${appName}.dmg`, `s3://${bucket}-releases/${appName}.dmg`]);
+  spawnOrFail('aws', ['s3', 'cp', '--acl', 'public-read', `release/${appName}.zip`, `s3://${bucket}-releases/mac/${appName}.zip`]);
 
   console.log ('... uploading Windows installer (this may take a while) ...');
-  spawnOrFail('aws', ['s3', 'cp', '--acl', 'public-read', `release/${appName}.msi`, `s3://${bucket}-releases/${appName}.msi`]);
+  spawnOrFail('aws', ['s3', 'cp', '--acl', 'public-read', `release/${appName}-win.zip`, `s3://${bucket}-releases/win/${appName}.zip`]);
 
   console.log('=============================================================');
   console.log('');
