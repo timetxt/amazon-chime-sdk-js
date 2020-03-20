@@ -127,7 +127,7 @@ function main() {
 
   process.chdir(rootDir);
 
-  spawnOrFail('script/cloud9-resize.sh');
+  spawnOrFail('script/cloud9-resize.sh', []);
 
   if (!fs.existsSync('amazon-chime-sdk-js')) {
     process.chdir('/tmp');
