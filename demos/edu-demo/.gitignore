@@ -52,3 +52,4 @@ npm-debug.log.*
 # Chime SDK
 amazon-chime-sdk-js
 app/utils/getBaseUrl.ts
+app/utils/getMessagingWssUrl.ts

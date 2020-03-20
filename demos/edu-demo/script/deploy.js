@@ -171,18 +171,27 @@ function main() {
                       '--capabilities', 'CAPABILITY_IAM', '--region', `${region}`]);
   const endpoint = spawnOrFail('aws', ['cloudformation', 'describe-stacks', '--stack-name', `${stack}`,
                       '--query', 'Stacks[0].Outputs[0].OutputValue', '--output', 'text', '--region', `${region}`]).trim();
-
+  const messagingWssUrl = spawnOrFail('aws', ['cloudformation', 'describe-stacks', '--stack-name', `${stack}`,
+                      '--query', 'Stacks[0].Outputs[1].OutputValue', '--output', 'text', '--region', `${region}`]).trim();
   console.log(`Endpoint: ${endpoint}`);
+  console.log(`Messaging WSS URL: ${messagingWssUrl}`);
 
   process.chdir(rootDir);
 
-  fs.writeFileSync('app/utils/getBaseUrl.ts', `export default function getBaseUrl() {return '${endpoint}';}`);
+  fs.writeFileSync('app/utils/getBaseUrl.ts', `
+export default function getBaseUrl() {return '${endpoint}';}
+`);
+
+  fs.writeFileSync('app/utils/getMessagingWssUrl.ts', `
+export default function getMessagingWssUrl() {return '${messagingWssUrl}';}
+`);
 
   spawnOrFail('yarn', []);
 
   console.log ('... packaging (this may take a while) ...');
   spawnAndIgnoreResult('yarn',  ['package-mac']);
   spawnAndIgnoreResult('yarn',  ['package-win']);
+  spawnOrFail('rm', ['-rf', `release/${appName}`]);
   spawnOrFail('mv', ['release/win-unpacked', `release/${appName}`]);
   process.chdir(rootDir + '/release');
   spawnOrFail('zip', ['-r', appName + '-win.zip', appName]);
