@@ -6,7 +6,7 @@
 
 1. Go to the [AWS Cloud9 Dashboard](https://us-east-1.console.aws.amazon.com/cloud9/home?region=us-east-1).
 2. Press the **Create environment** button or go [here](https://us-east-1.console.aws.amazon.com/cloud9/home/create).
-3. For the Name enter `<YourName>VideoHelpDesk` and press the **Next step** button.
+3. For the Name enter `<unique environment name>` and press the **Next step** button.
 4. For **Environment Settings** use the defaults and press the **Next step** button.
 5. Review the **Environment name and settings** and press the **Create environment** button.
 6. Wait for the environment to start.
