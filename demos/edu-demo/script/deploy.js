@@ -110,11 +110,14 @@ function appHtml(appName) {
   return `../browser/dist/${appName}.html`
 }
 
+function setupCloud9() {
+}
+
 function ensureTools() {
   spawnOrFail('aws', ['--version']);
   spawnOrFail('sam', ['--version']);
+  spawnOrFail('npm', ['install', '-g', 'yarn']);
 }
-
 
 function main() {
   parseArgs();
@@ -123,6 +126,9 @@ function main() {
   const rootDir = __dirname + '/..';
 
   process.chdir(rootDir);
+
+  spawnOrFail('script/cloud9-resize.sh');
+
   if (!fs.existsSync('amazon-chime-sdk-js')) {
     process.chdir('/tmp');
     spawnOrFail('rm', ['-rf', '/tmp/amazon-chime-sdk-js']);
