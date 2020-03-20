@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: #252525;
+  color: var(--color_dark_pen);
+  background: var(--color_chalkboard);
 }
 
 .title {

@@ -18,7 +18,7 @@
 
 .controls button.enabled {
   color: #454545;
-  background: #fafafa;
+  background: var(--color_chalk);
 }
 
 .controls button + button {

@@ -1,7 +1,7 @@
+import { VideoTileState } from 'amazon-chime-sdk-js';
 import classNames from 'classnames/bind';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { VideoTileState } from 'amazon-chime-sdk-js';
 import getChimeContext from '../context/getChimeContext';
 import styles from './TeacherVideo.css';
 

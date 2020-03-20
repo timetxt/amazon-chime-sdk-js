@@ -1,15 +1,16 @@
-import classNames from 'classnames/bind';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-
 import {
   MeetingSessionStatus,
   MeetingSessionStatusCode
 } from 'amazon-chime-sdk-js';
+import classNames from 'classnames/bind';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+
 import routes from '../constants/routes.json';
 import getChimeContext from '../context/getChimeContext';
 import Controls from './Controls';
 import LoadingSpinner from './LoadingSpinner';
+import Roster from './Roster';
 import StudentVideoGroup from './StudentVideoGroup';
 import styles from './TeacherRoom.css';
 import TeacherVideo from './TeacherVideo';
@@ -86,19 +87,29 @@ export default function TeacherRoom() {
       {status === Status.Loading && <LoadingSpinner />}
       {(status === Status.RoomReady || status === Status.Succeeded) && (
         <>
-          <div className={cx('group')}>
-            <StudentVideoGroup />
+          <div className={cx('left')}>
+            <div className={cx('remoteVideoGroup')}>
+              <StudentVideoGroup />
+            </div>
+            <div className={cx('localVideoContainer')}>
+              <Controls />
+              <TeacherVideo />
+            </div>
           </div>
-          <div className={cx('bottom')}>
-            <Controls />
-            <TeacherVideo />
+          <div className={cx('right')}>
+            <div className={cx('roster')}>
+              <Roster />
+            </div>
+            <div className={cx('chat')}>Chat here</div>
           </div>
         </>
       )}
       {status === Status.Failed && errorMesssage && (
-        <div>
-          {errorMesssage}
-          <Link to={routes.HOME}>Go home</Link>
+        <div className={cx('error')}>
+          <div className={cx('errorMessage')}>{errorMesssage}</div>
+          <Link className={cx('goHomeLink')} to={routes.HOME}>
+            Take me home
+          </Link>
         </div>
       )}
     </div>

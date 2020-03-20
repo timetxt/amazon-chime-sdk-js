@@ -1,0 +1,30 @@
+.roster {
+  display: block;
+  color: #e6e6e6;
+}
+
+.attendee {
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  padding: 0 1rem;
+}
+
+.attendee + .attendee {
+  border-top: 1px solid #3c3c3c;
+}
+
+.name {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
+.muted {
+  text-align: center;
+  flex: 0 0 1.5rem;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  width: 1.5rem;
+}

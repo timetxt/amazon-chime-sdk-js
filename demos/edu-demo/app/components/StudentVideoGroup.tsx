@@ -1,9 +1,10 @@
+import { VideoTileState } from 'amazon-chime-sdk-js';
 import classNames from 'classnames/bind';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
-import { VideoTileState } from 'amazon-chime-sdk-js';
 import getChimeContext from '../context/getChimeContext';
-import StudentVideo from './StudentVideo';
+import RosterAttendeeType from '../types/RosterAttendeeType';
+import StudentVideo, { Size } from './StudentVideo';
 import styles from './StudentVideoGroup.css';
 
 const cx = classNames.bind(styles);
@@ -12,6 +13,7 @@ const MAX_STUDENT_VIDEOS = 16;
 export default function StudentVideoGroup() {
   const chime = useContext(getChimeContext());
   const [visibleIndices, setVisibleIndices] = useState({});
+  const [roster, setRoster] = useState({});
   const videoElements: HTMLVideoElement[] = [];
   const tiles: { [index: number]: number } = {};
 
@@ -58,18 +60,45 @@ export default function StudentVideoGroup() {
         );
         setVisibleIndices(previousVisibleIndices => ({
           ...previousVisibleIndices,
-          [index]: true
+          [index]: {
+            boundAttendeeId: tileState.boundAttendeeId
+          }
         }));
+        setTimeout(() => {
+          setRoster({
+            ...chime.roster
+          });
+        }, 2000);
       },
       videoTileWasRemoved: (tileId: number): void => {
         const index = releaseVideoIndex(tileId);
         setVisibleIndices(previousVisibleIndices => ({
           ...previousVisibleIndices,
-          [index]: false
+          [index]: null
         }));
       }
     });
   }, []);
+
+  useEffect(() => {
+    const callback = (newRoster: RosterType) => {
+      setRoster(newRoster);
+    };
+    chime.subscribeToRosterUpdate(callback);
+    return () => {
+      chime.unsubscribeFromRosterUpdate(callback);
+    };
+  }, []);
+
+  const getSize = (): Size => {
+    if (numberOfVisibleIndices >= 10) {
+      return Size.Small;
+    }
+    if (numberOfVisibleIndices >= 5) {
+      return Size.Medium;
+    }
+    return Size.Large;
+  };
 
   return (
     <div
@@ -78,15 +107,27 @@ export default function StudentVideoGroup() {
         `studentVideoGroup-${numberOfVisibleIndices}`
       )}
     >
-      {Array.from(Array(MAX_STUDENT_VIDEOS).keys()).map((key, index) => (
-        <StudentVideo
-          key={key}
-          enabled={visibleIndices[index]}
-          videoElementRef={useCallback((element: HTMLVideoElement) => {
-            videoElements[index] = element;
-          }, [])}
-        />
-      ))}
+      {numberOfVisibleIndices === 0 && (
+        <div className={cx('instruction')}>{`Hi ${chime.name}`}</div>
+      )}
+      {Array.from(Array(MAX_STUDENT_VIDEOS).keys()).map((key, index) => {
+        const visibleIndex = visibleIndices[index];
+        let rosterAttendee: RosterAttendeeType = {};
+        if (visibleIndex) {
+          rosterAttendee = roster[visibleIndex.boundAttendeeId];
+        }
+        return (
+          <StudentVideo
+            key={key}
+            enabled={!!visibleIndex}
+            videoElementRef={useCallback((element: HTMLVideoElement) => {
+              videoElements[index] = element;
+            }, [])}
+            size={getSize()}
+            rosterAttendee={rosterAttendee}
+          />
+        );
+      })}
     </div>
   );
 }

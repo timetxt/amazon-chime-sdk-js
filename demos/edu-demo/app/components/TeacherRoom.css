@@ -1,21 +1,87 @@
 .teacherRoom {
   display: flex;
-  flex-direction: column;
-  background: #252525;
+  background: var(--color_chalkboard);
   height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .audio {
   display: none;
 }
 
-.group {
+.left {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.remoteVideoGroup {
   flex: 1 1 auto;
 }
 
-.bottom {
-  flex: 0 0 var(--bottom-height);
+.localVideoContainer {
+  flex: 0 0 var(--local_video_container_height);
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: center;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--right_panel_width);
+  background: #2d2d2d;
+  height: 100%;
+  overflow: hidden;
+}
+
+.roster {
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  height: 50%;
+}
+
+.chat {
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+}
+
+.error {
+  text-align: center;
+  max-width: 50%;
+}
+
+.errorMessage {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  font-size: 1.5rem;
+}
+
+.goHomeLink {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color_chalkboard);
+  background: var(--color_chalk);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  user-select: none;
+  text-decoration: none;
+  margin-top: 2.5rem;
+}
+
+.goHomeLink:hover {
+  opacity: 0.8;
 }
