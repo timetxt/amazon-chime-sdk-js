@@ -187,7 +187,7 @@ export class DemoMeetingApp implements AudioVideoObserver, DeviceChangeObserver,
           }
           (document.getElementById(
             'meeting-id'
-          ) as HTMLSpanElement).innerHTML = `${this.meeting} (${this.region})`;
+          ) as HTMLSpanElement).innerHTML += `${this.meeting} (${this.region})`;
           (document.getElementById('info-meeting') as HTMLSpanElement).innerHTML = this.meeting;
           (document.getElementById('info-name') as HTMLSpanElement).innerHTML = this.name;
           this.switchToFlow('flow-devices');
@@ -524,6 +524,9 @@ export class DemoMeetingApp implements AudioVideoObserver, DeviceChangeObserver,
         LogLevel.INFO
       );
     }
+    (document.getElementById(
+      'meeting-id'
+    ) as HTMLSpanElement).innerHTML = configuration.meetingId;
     const deviceController = new DefaultDeviceController(logger);
     configuration.enableWebAudio = this.enableWebAudio;
     this.meetingSession = new DefaultMeetingSession(configuration, logger, deviceController);

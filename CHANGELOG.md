@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable POSTLogger for the serverless demo app
 - Add max-content-share query parameter to allow 2 content share at the same time
 - Add an integration test that checks only 2 content share are allowed
+- Display meeting id in the demo app
 
 ### Changed
 - Add observer event for content sharing
