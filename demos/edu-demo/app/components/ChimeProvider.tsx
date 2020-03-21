@@ -9,13 +9,18 @@ import {
   DeviceChangeObserver,
   LogLevel,
   MeetingSession,
-  MeetingSessionConfiguration
+  MeetingSessionConfiguration,
+  ReconnectingPromisedWebSocket,
+  DefaultPromisedWebSocketFactory,
+  DefaultDOMWebSocketFactory,
+  FullJitterBackoff
 } from 'amazon-chime-sdk-js';
 import React from 'react';
 
 import getChimeContext from '../context/getChimeContext';
 import RosterType from '../types/RosterType';
 import getBaseUrl from '../utils/getBaseUrl';
+import getMessagingWssUrl from '../utils/getMessagingWssUrl';
 
 class ChimeSdkWrapper
   implements AudioVideoObserver, ContentShareObserver, DeviceChangeObserver {
@@ -33,6 +38,10 @@ class ChimeSdkWrapper
 
   contentShareEnabled = false;
 
+  configuration: MeetingSessionConfiguration = null;
+
+  messagingSocket: ReconnectingPromisedWebSocket = null;
+
   // eslint-disable-next-line
   createRoom = async (title: string, name: string, region: string): Promise<any> => {
     const response = await fetch(
@@ -49,9 +58,8 @@ class ChimeSdkWrapper
     }
 
     const { JoinInfo } = json;
-    await this.initializeMeetingSession(
-      new MeetingSessionConfiguration(JoinInfo.Meeting, JoinInfo.Attendee)
-    );
+    this.configuration = new MeetingSessionConfiguration(JoinInfo.Meeting, JoinInfo.Attendee);
+    await this.initializeMeetingSession(this.configuration);
 
     this.title = title;
     this.name = name;
@@ -142,6 +150,40 @@ class ChimeSdkWrapper
     this.audioVideo.start();
   };
 
+  joinRoomMessaging = async (messageCallback: (type: string, payload: any) => void): Promise<void> => {
+    const messagingUrl = `${getMessagingWssUrl()}?MeetingId=${
+      this.configuration.meetingId
+    }&AttendeeId=${
+      this.configuration.credentials.attendeeId
+    }&JoinToken=${
+      this.configuration.credentials.joinToken
+    }`;
+    this.messagingSocket = new ReconnectingPromisedWebSocket(
+      messagingUrl,
+      [],
+      'arraybuffer',
+      new DefaultPromisedWebSocketFactory(new DefaultDOMWebSocketFactory()),
+      new FullJitterBackoff(1000, 0, 10000),
+    );
+    await this.messagingSocket.open(10000);
+    console.log('connected');
+    this.messagingSocket.addEventListener('message', (evt) => {
+      console.log('received message raw:', evt.data);
+      const data = JSON.parse(evt.data);
+      console.log('received message:', data);
+      messageCallback(data.type, data.payload);
+    });
+  };
+
+  sendMessage = (type: string, payload: any) => {
+    if (!this.messagingSocket) {
+      return;
+    }
+    const message = {"message": "sendmessage", "data": JSON.stringify({type: type, payload: payload})};
+    console.log('sending message', message);
+    this.messagingSocket.send(JSON.stringify(message));
+  };
+
   leaveRoom = async (end: boolean): Promise<void> => {
     this.audioVideo.stop();
 
@@ -169,6 +211,10 @@ class ChimeSdkWrapper
       this.rosterUpdateCallbacks = [];
     }
   };
+
+  leaveRoomMessaging = async (): Promise<void> => {
+    await this.messagingSocket.close();
+  }
 
   private rosterUpdateCallbacks: RosterType[] = [];
 

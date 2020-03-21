@@ -104,11 +104,9 @@ exports.sendmessage = async event => {
     attendees = await ddb.query({
       ExpressionAttributeValues: {
         ':meetingId': {S: event.requestContext.authorizer.MeetingId},
-        ':selfConnectionId': {S: event.requestContext.connectionId},
       },
       KeyConditionExpression: 'MeetingId = :meetingId',
       ProjectionExpression: 'ConnectionId',
-      FilterExpression: 'ConnectionId <> :selfConnectionId',
       TableName: CONNECTIONS_TABLE_NAME,
     }).promise();
   } catch (e) {

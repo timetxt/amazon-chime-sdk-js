@@ -75,6 +75,7 @@ export default function Controls() {
         className={cx('endButton')}
         onClick={() => {
           chime.leaveRoom(true);
+          chime.leaveRoomMessaging();
           history.push('/');
         }}
       >
